@@ -1,0 +1,162 @@
+/*
+	STYLE.CSS
+*/
+
+html {
+	margin: 0;
+	padding: 0;
+}
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+header {
+	padding: 2em;
+	background-color: #444;
+}
+footer {
+	background-color: #000;
+	color: #fff;
+	text-shadow: 1px 1px 3px #444;
+}
+
+a {
+  color: #00B7FF;
+}
+
+
+ul {
+
+}
+ul li {
+	list-style: none;
+
+}
+ul li h3 {
+	text-align: right;
+	display: inline-block;
+	width: 200px;
+	height: 50px;
+	font-size: 20px;
+	padding-right: 20px;
+	text-shadow: 1px 1px 1px #000;
+	margin: 0;
+}
+nav ul li{
+	display: inline-block;
+}
+
+input {
+	width: 300px;
+	height: 40px;
+	font-size: 20px;
+	box-shadow: 1px 1px 8px 1px #000 inset;
+	padding-left: 20px;
+}
+button {
+	width: 75px;
+	height: 40px;
+	font-size: 20px;	
+}
+
+
+.row {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.container {
+  padding-left:15px;
+  padding-right:15px;
+  margin-left:auto;
+  margin-right:auto;
+  width: 960px;
+}
+.col-1s, .col-2s, .col-3s, .col-4s, .col-5s, .col-6s, .col-7s, .col-8s, .col-9s, .col-10s, .col-11s, .col-12s, .col-1n, .col-2n, .col-3n, .col-4n, .col-5n, .col-6n, .col-7n, .col-8n, .col-9n, .col-10n, .col-11n, .col-12n {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.col-1s, .col-2s, .col-3s, .col-4s, .col-5s, .col-6s, .col-7s, .col-8s, .col-9s, .col-10s, .col-11s, .col-12s {
+  float: left;
+}
+.col-1s {
+  width: 8.333333333%;
+}
+.col-2s {
+  width: 16.666666666%;
+}
+.col-3s {
+  width: 25%;
+}
+.col-4s {
+  width: 33.333333333%;
+}
+.col-5s {
+  width: 41.666666666%;
+}
+.col-6s {
+  width: 50%;
+}
+.col-7s {
+  width: 58.333333333%;
+}
+.col-8s {
+  width: 66.666666666%;
+}
+.col-9s {
+  width: 0.75%;
+}
+.col-10s {
+  width: 83.333333333%;
+}
+.col-11s {
+  width: 91.666666666%;
+}
+.col-12s {
+  width: 100%;
+}
+@media(min-width:768px) {
+  .container {
+    width: 1170px;
+  }
+  .col-1n, .col-2n, .col-3n, .col-4n, .col-5n, .col-6n, .col-7n, .col-8n, .col-9n, .col-10n, .col-11n, .col-12n {
+    float: left;
+  }
+  .col-1n {
+    width: 8.333333333%;
+  }
+  .col-2n {
+    width: 16.666666666%;
+  }
+  .col-3n {
+    width: 25%;
+  }
+  .col-4n {
+    width: 33.333333333%;
+  }
+  .col-5n {
+    width: 41.666666666%;
+  }
+  .col-6n {
+    width: 50%;
+  }
+  .col-7n {
+    width: 58.333333333%;
+  }
+  .col-8n {
+    width: 66.666666666%;
+  }
+  .col-9n {
+    width: 75%;
+  }
+  .col-10n {
+    width: 83.333333333%;
+  }
+  .col-11n {
+    width: 91.666666666%;
+  }
+  .col-12n {
+    width: 100%;
+  }
+}

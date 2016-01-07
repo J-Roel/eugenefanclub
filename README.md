@@ -1,94 +1,49 @@
-# Bcrypt + Knex
+# Express Validations
 
-We are going to practice our Postgres skills by creating a database and table in Postgres then connecting to it to a node app using Knex.
+These instructions are written for `jade`, but if you want to use a different template engine you may. Feel free to ask me any questions.
+
+### Goals:
+
+ - To be able to validate user form submissions using express.
+ - To be able to update views to notify users of invalid form submissions.
+
+# Step One
+
+1. In the `routes` directory create a file named `auth.js`.
+1. Add the `auth.js` route to your `app.js` file for all `/auth` requests.
+1. In `auth.js` create a `post` route for all `/signin` requests.
+
+# Step Two
+
+1. In the `views` directory create a view named `signin.jade` (you can use any template engine you want if you don't like jade);
+1. Add a form with username and password inputs that posts to `/auth/signin`
+
+# Step Three
+
+1. In `auth.js` create a `get` route for all `/signin` requests that responds with template `signin.jade`
+
+# Step Four
+
+1. In `auth.js` add logic to your `/signin` `post` route to test if:
+ - password equals `notverysecure`
+ - username equals `xoEugenexoxo`
+1. If both are true redirect to `/index`.
+1. Otherwise re-render `signin` template with the fields filled in and error messages.
+
+# Step Five
+
+1. In `users.js` add a `post` route for `/signup`
+1. Follow the same steps as before to create a `signup.jade`
+  - This time with fields for username, email, phone, firstname, lastname, password, password check.
+  - Ensure the password and password check are the same and at least 8 characters.
+  - Ensure the email address contains an @ characters.
+  - Ensure the phone number consists of only numbers and is 10 digits.
+  - Ensure username, firstname and lastname exist.
+1. `signup.jade` should post to `/users/signup`.
+  - If successful redirect to `/auth/signin`
+  - If fail re-render with forms still filled in and proper error messages.
 
 
-# Setting Up The Exercise
+# Bonus:
 
-1. Using the PSQL command create a database called `eugenefanclub`
-1. Connect to the database in PSQL and create a table called `users`
-   - Should have email, username, first name, last name, phone and password fields
-1. Create a directory called `eugenefanclub`
-1. `cd` into the fresh directory and create a `package.json` using the `npm` command
-1. Install and save the following modules to your `package.json`: `bcrypt` `knex` and `pg`
-1. Use the `touch` command to create a file called `app.js` in your `eugenefanclub` directory.
-
-# Part One: Bcrypt
-
-*Implement all of the following functions and test them in your `app.js` file.*
-
-- *Question:* Bcrypt has synchronous and asynchronous functions, since we are programming with `node`, which do you think we should use?
-
-The code is expected to operate on a `user` object, here is an example of one:
-
-```
-var testUser = {
-  username: 'xoEugenexoxo',
-  firstname: 'Logan',
-  lastname: 'King',
-  phone: '1234567890',
-  email: 'number1eugenefanboy@hotmail.com',
-  password: 'notverysecure'
-};
-```
-
-1. *Create a function called `hashPassword` with parameters `user` and `callback`*
-  - The function should use `bcrypt` to hash the `user.password`, upon success it should replace `user.password` with the returned `hash`, then it should invoke the `callback` function passing in the `user` as the argument.
-
-
-2. *Create a function called `comparePassword` with parameters `password`, `user` and `callback`*
-  - The function should use `bcrypt` to compare the `password` to `user.password`, if they are the same it should invoke `callback` passing in `true` and `user` as arguments, otherwise should invoke the callback with `false` and `user` as arguments.
-
-# Bonus: Knex
-
-*Implement all of the following and test them in your `app.js` file.*
-
-- *Question:* Knex uses a `then` and `catch` instead of callbacks, what is this pattern called?
-
-1. Connect to your `Postgres` database using `Knex`:
-```
-var knexOptions = {
-  client: 'pg', //tell knex to use postgres driver module pg
-  connection: {
-    host: '127.0.0.1', //connect to local db
-    port: 5432, //on the default postgres port
-    user: 'yourUsernameHere' //put your username here
-    debug: false, //when facing issues can be nice to set to true
-    database: 'eugenefanclub' //name of database
-  }
-};
-var connection = Knex(knexOptions);
-```
-
-2. Create a function called `User` that returns the table we created earlier.
-```
-return connection('users');
-```
-
-3. Create a function called `registerUser` that takes in `user` `callback` as arguments.
-  - It should invoke your `hashPassword` function to hash the user password.
-  - After successfully hashing a pass it should insert a user into the database using the following format:
-```
-User().insert({
-
-  })
-  .then(function(response){
-
-  })
-  .catch(function(err){
-
-  });
-```
-
-4. Create a function called `loginUser` that takes in a `user` and `callback` as arguments.
-  - It should look up the user in the database by username using the following format:
-```
-User().where('username', username)
-  .then(function(response){
-
-  })
-  .catch(function(err){
-
-  });
-```
-  - Upon successfully getting a user it should use your `comparePassword` function to check if the passwords match.
+1. Now tie in the database and crypto logic from eugene fanclub part 1 to sign in users and sign up users. 
