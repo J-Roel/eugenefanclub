@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var bcrypt = require('bcrypt');
 var knex = require('knex')({
   client: 'pg',
   connection: {
@@ -10,20 +11,23 @@ var knex = require('knex')({
   }
 });
 
+
 /* GET users listing. */
 router.get('/signup', function(req, res, next) {
-	var errors = [];
-	var data = {};
-  res.render('signup', {
-  	title: 'Sign Up!',
-  	data: data,
-  	errors: errors
-  });
+	var errors = [];//create empty array to prevent errors
+	var data = {};//create empty object to prevent errors
+	
+	res.render('signup', {
+		title: 'Sign Up!',
+		data: data,
+		errors: errors
+	});
 });
 
 
 
 router.post('/signup', function(req, res, next) {
+	
 	//get our post fields
 	console.log("in signup post")
   	var username = req.body.username;
@@ -35,11 +39,9 @@ router.post('/signup', function(req, res, next) {
   	var passwordcheck = req.body.passwordcheck;
 
 
-  	//==============================================
+  	
   	//VALIDATION====================================
-  	//==============================================
-  	//setup var for containing various errorMsgs
-  	var errorMsg = [];
+  	var errorMsg = []; //setup var for containing various error messages
   	//Validate password length
   	if (password.length < 8 || passwordcheck.length < 8)
   	{
@@ -52,9 +54,8 @@ router.post('/signup', function(req, res, next) {
 	}
  
 	//Validate phone number
-	if(/a-zA-Z/.test(phone))
+	if(phone.indexOf(/a-zA-Z/) > 0)
 	{
-		console.log('phone number invalid.')
 		errorMsg.push('Phone needs to be numbers only.')
 	}
 	if(phone.length > 10)
@@ -75,11 +76,8 @@ router.post('/signup', function(req, res, next) {
 	{
 		errorMsg.push('Need a last name.');
 	}
-
-
-
-  	var chkd = hashPassword(pass, user, checkPassword);
-  	console.log("Errors: ", errorMsg);
+  	//console.log("Errors: ", errorMsg);//Testing
+  	
   	if (errorMsg.length)
   	{
   		console.log('Errors found going back to signup');
@@ -89,23 +87,30 @@ router.post('/signup', function(req, res, next) {
 	  			errors: errorMsg 
 	  		});
 	} else {
-		//SUCCESS: so insert into database
-		knex('users').insert({
-				username: username,
-			  	first_name: first_name,
-			  	last_name: last_name,
-			  	phone: phone,
-			  	email: email,
-			  	password: password
-		}).then(function(countInserted){
-			console.log("Entry put into table: ", countInserted)
-			res.redirect('/auth/signin');
-		}).catch(function(err){
-			console.log("users/signup ERROR: ", err);
+		//--SUCCESS--
 
-		});
+		//Hash password
+		bcrypt.genSalt(10, function(err, salt) {
+	        bcrypt.hash(password, salt, function(err, hash) {          
+	           
+				//Insert into our database
+				knex('users').insert({
+						username: username,
+					  	first_name: first_name,
+					  	last_name: last_name,
+					  	phone: phone,
+					  	email: email,
+					  	password: hash
+				}).then(function(countInserted){
+					console.log("Entry put into table: ", countInserted)
+					res.redirect('/auth/signin');
+				}).catch(function(err){
+					console.log("users/signup ERROR: ", err);
 
-		
+				});
+
+	    	});
+	    });
 	}
 });
 
@@ -132,9 +137,6 @@ router.get('/update', function(req,res,next){
 		});
 	//End knex
 });
-
-
-
 
 
 module.exports = router;

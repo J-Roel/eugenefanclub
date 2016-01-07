@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var bcrypt = require('bcrypt');
 var knex = require('knex')({
   client: 'pg',
   connection: {
@@ -22,35 +23,29 @@ router.post('/signin', function(req, res, next) {
   var password = req.body.password;
   	
   
-  knex('users').select().where({username: username}).then(
-      function(userData){
-
-        //SUCESS
-          var data = userData[0];
-          console.log("Data from DB: ", data);
-      
-      //var chkd = hashPassword(password, username, checkPassword);
-
-  }).then(function(data){
-    //compare our hashes
-
-
-
- }).then(function(chkPwd){
-    //render our pages
-
-    if (chkPwd)
-      {
+  knex('users').select().where({username: username})
+  .then(function(userData){
+      //SUCESS
+      return new Promise(function(resolve, reject){
+        var user = userData[0];
+        console.log("Data from DB: ", data);
+        console.log(password);
+        resolve(user);
+      });
+  }).then(function(user){
+      //Don't return a promise here...
+      //compare our hashes
+      bcrypt.compare(password, user.password, function(err, match) {
+        if(match) {
+          console.log('here');
           res.redirect('/');
-      } else {
+        }else{
           res.render('signin', { title: 'Sign In',
-                error: '',
-                data: data
-              });
-     }//End if password check
-
- })
-
+            error: 'Username or password incorrect.',
+            data: user
+          });
+        }
+      });
   }).catch(function(err){//IF WE HAVE ERRORS
       console.log("ERROR: ", err);
       data = {};
@@ -59,31 +54,29 @@ router.post('/signin', function(req, res, next) {
       } else {
           res.render('signin', { title: 'Sign In', error: '', data: data});
       }
-
-
   });
   //End knex
 
 });
 
 
-function hashPassword(password, user, callback){
-	bcrypt.genSalt(10, function(err, salt) {
-    	bcrypt.hash(user.password, salt, function(err, hash) {
-        	return hash;
-    	});
-	});
-}
+// function hashPassword(password, user, callback){
+// 	bcrypt.genSalt(10, function(err, salt) {
+//     	bcrypt.hash(user.password, salt, function(err, hash) {
+//         	return hash;
+//     	});
+// 	});
+// }
 
-function checkPassword(password, hash){
-	bcrypt.compare(password, hash, function(err, res) {
-    	if(res) {
-    		return true;
-    	}else{
-    		return false;
-    	}
-	});
-};
+// function checkPassword(password, hash){
+// 	bcrypt.compare(password, hash, function(err, res) {
+//     	if(res) {
+//     		return true;
+//     	}else{
+//     		return false;
+//     	}
+// 	});
+// };
 
 
 
